@@ -21,14 +21,32 @@ class StringCalculator {
     // Default delimiter: comma `,` and newline `\n`
     String delimiter = r'[\n,]';
 
-    // Check if input specifies a custom delimiter using the format "//[delimiter]\n[numbers...]"
-    final customDelimiterMatch = RegExp(r'^//(.+)\n').firstMatch(numbers);
-    if (customDelimiterMatch != null) {
-      // Extract custom delimiter and allow newlines as well
-      delimiter = '${RegExp.escape(customDelimiterMatch.group(1)!)}|\n';
+    // Check if the input string starts with a custom delimiter declaration
+    if (numbers.startsWith('//')) {
+      // Find the index where the delimiter section ends (newline character `\n`)
+      final delimiterEndIndex = numbers.indexOf('\n');
 
-      // Remove the custom delimiter definition from the input string
-      numbers = numbers.substring(customDelimiterMatch.end);
+      // Extract the delimiter section (between `//` and `\n`)
+      final delimiterSection = numbers.substring(2, delimiterEndIndex);
+
+      // Define a regex pattern to detect custom delimiters enclosed in square brackets `[...]`
+      final delimiterPattern = RegExp(r'\[.*?\]');
+
+      // Find all matches of custom delimiters in the delimiter section
+      final matches = delimiterPattern.allMatches(delimiterSection);
+
+      if (matches.isNotEmpty) {
+        // If multiple delimiters are found, extract and escape them for regex use
+        delimiter = matches.map((match) {
+          return RegExp.escape(match.group(0)!.replaceAll('[', '').replaceAll(']', '')); // Remove brackets and escape
+        }).join('|'); // Join multiple delimiters with `|` for regex OR condition
+      } else {
+        // If no brackets are found, treat the entire section as a single custom delimiter
+        delimiter = RegExp.escape(delimiterSection);
+      }
+
+      // Remove the delimiter declaration from the input string, leaving only the numbers
+      numbers = numbers.substring(delimiterEndIndex + 1);
     }
 
     // Split the numbers using the extracted/custom delimiter

@@ -63,6 +63,42 @@ void main() {
         equals(6)); // Verify sum using custom delimiter ";"
   });
 
+  /// Test case: Handles a custom multi-character delimiter
+  ///
+  /// - Input: `"//[***]\n1***2***3"`
+  /// - Expected Outcome: `6`
+  /// - Explanation:
+  ///   - The custom delimiter is `"***"`.
+  ///   - The numbers `1`, `2`, and `3` are separated by `"***"`.
+  ///   - The sum of `1 + 2 + 3 = 6`.
+  test('Handles custom multi-character delimiter', () {
+    expect(calculator.add("//[***]\n1***2***3"), equals(6));
+  });
+
+  /// Test case: Handles multiple custom single-character delimiters
+  ///
+  /// - Input: `"//[*][%]\n1*2%3"`
+  /// - Expected Outcome: `6`
+  /// - Explanation:
+  ///   - Two custom delimiters: `"*"` and `"%"`.
+  ///   - The numbers `1`, `2`, and `3` are separated by these delimiters.
+  ///   - The sum of `1 + 2 + 3 = 6`.
+  test('Handles multiple custom delimiters', () {
+    expect(calculator.add("//[*][%]\n1*2%3"), equals(6));
+  });
+
+  /// Test case: Handles multiple multi-character custom delimiters
+  ///
+  /// - Input: `"//[***][%%]\n1***2%%3"`
+  /// - Expected Outcome: `6`
+  /// - Explanation:
+  ///   - Two multi-character delimiters: `"***"` and `"%%"`.
+  ///   - The numbers `1`, `2`, and `3` are separated by these delimiters.
+  ///   - The sum of `1 + 2 + 3 = 6`.
+  test('Handles multiple multi-character delimiters', () {
+    expect(calculator.add("//[***][%%]\n1***2%%3"), equals(6));
+  });
+
   /// Test case: Throws an exception for negative numbers
   ///
   /// - Input: `"1,-2,3,-4"`
