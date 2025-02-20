@@ -45,4 +45,20 @@ void main() {
     controller.calculate();
     expect(controller.result.value, "6");
   });
+
+  /// Test case: Throws an exception for negative numbers
+  ///
+  /// - Input: `"1,-2,3,-4"`
+  /// - Expected Outcome: `"Exception: Negative numbers not allowed: -2, -4"`
+  /// - Explanation:
+  ///   - The controller receives an input string containing negative numbers.
+  ///   - When `calculate()` is called, it processes the input using `StringCalculator`.
+  ///   - If negative numbers are found, an exception message should be stored in `result.value`.
+  ///   - The test verifies that the exception message correctly lists all negative numbers.
+  test('Throws an exception for negative numbers', () {
+    controller.updateInput("1,-2,3,-4");
+    controller.calculate();
+    expect(controller.result.value, "Negative numbers not allowed [-2, -4]");
+  });
+
 }

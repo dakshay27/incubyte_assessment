@@ -4,12 +4,14 @@ class StringCalculator {
   /// - Default delimiters: Comma (`,`) and newline (`\n`).
   /// - Supports custom delimiters defined in the format: `//[delimiter]\n[numbers...]`.
   /// - Returns 0 if the input string is empty.
+  /// - Returns Error if the number is negative.
   ///
   /// Example usages:
   /// ```
   /// add("1,2,3") -> 6
   /// add("1\n2,3") -> 6
-  /// add("//;\n1;2;3") -> 6  // Custom delimiter ";"
+  /// add("//;\n1;2;3") -> 6
+  /// Custom delimiter ";"
   /// ```
   int add(String numbers) {
     // Return 0 if input is empty
@@ -33,6 +35,12 @@ class StringCalculator {
         .split(RegExp(delimiter)) // Regex allows multiple delimiters
         .where((number) => number.trim().isNotEmpty) // Ignore empty values
         .map(int.parse); // Convert to integers
+
+    // 🔴 Find negative numbers
+    var negativeNumbers = sanitizedNumbers.where((n) => n < 0).toList();
+    if (negativeNumbers.isNotEmpty) {
+      throw FormatException("Negative numbers not allowed [${negativeNumbers.join(', ')}]");
+    }
 
     // Return the sum of all numbers, or 0 if the list is empty
     return sanitizedNumbers.isEmpty ? 0 : sanitizedNumbers.reduce((a, b) => a + b);

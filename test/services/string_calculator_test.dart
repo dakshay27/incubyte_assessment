@@ -62,4 +62,24 @@ void main() {
     expect(calculator.add("//;\n1;2;3"),
         equals(6)); // Verify sum using custom delimiter ";"
   });
+
+  /// Test case: Throws an exception for negative numbers
+  ///
+  /// - Input: `"1,-2,3,-4"`
+  /// - Expected Outcome: Exception with message `"Negative numbers not allowed: -2, -4"`
+  /// - Explanation:
+  ///   - The function should detect negative numbers in the input.
+  ///   - If any negative numbers are present, it should throw an exception.
+  ///   - The exception message should list all negative numbers found in the input.
+  test('Throws an exception for negative numbers', () {
+    expect(
+          () => calculator.add("1,-2,3,-4"),
+      throwsA(predicate(
+            (e) =>
+        e is Exception &&
+            e.toString().split(": ").last.trim() == "Negative numbers not allowed [-2, -4]",
+      )),
+    );
+  });
+
 }

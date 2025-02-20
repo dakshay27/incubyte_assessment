@@ -28,7 +28,7 @@ class CalculatorController extends GetxController {
       final sum = _calculator.add(input.value);
       result.value = sum.toString();
     } catch (e) {
-      result.value = e.toString();
+      result.value = e.toString().split(": ").last.trim();
     }
   }
 }
