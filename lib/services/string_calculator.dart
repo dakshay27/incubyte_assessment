@@ -5,6 +5,7 @@ class StringCalculator {
   /// - Supports custom delimiters defined in the format: `//[delimiter]\n[numbers...]`.
   /// - Returns 0 if the input string is empty.
   /// - Returns Error if the number is negative.
+  /// - Numbers bigger than 1000 should be ignored
   ///
   /// Example usages:
   /// ```
@@ -39,10 +40,15 @@ class StringCalculator {
     // 🔴 Find negative numbers
     var negativeNumbers = sanitizedNumbers.where((n) => n < 0).toList();
     if (negativeNumbers.isNotEmpty) {
-      throw FormatException("Negative numbers not allowed [${negativeNumbers.join(', ')}]");
+      throw FormatException(
+          "Negative numbers not allowed [${negativeNumbers.join(', ')}]");
     }
 
     // Return the sum of all numbers, or 0 if the list is empty
-    return sanitizedNumbers.isEmpty ? 0 : sanitizedNumbers.reduce((a, b) => a + b);
+    return sanitizedNumbers.isEmpty
+        ? 0
+        : sanitizedNumbers
+            .where((number) => number <= 1000) // Numbers bigger than 1000 should be ignored
+            .reduce((a, b) => a + b);
   }
 }

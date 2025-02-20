@@ -61,4 +61,18 @@ void main() {
     expect(controller.result.value, "Negative numbers not allowed [-2, -4]");
   });
 
+  /// Test case: Ignores numbers greater than 1000
+  ///
+  /// - Input: `"2,1001,3"`
+  /// - Expected Outcome: `"5"`
+  /// - Explanation:
+  ///   - The input contains the numbers `2`, `1001`, and `3`.
+  ///   - The calculator should **ignore numbers greater than 1000**.
+  ///   - `1001` is ignored, so the sum is `2 + 3 = 5`.
+  ///   - The test verifies that only valid numbers are summed.
+  test('Ignores numbers greater than 1000', () {
+    controller.updateInput("2,1001,3");
+    controller.calculate();
+    expect(controller.result.value, "5");
+  });
 }

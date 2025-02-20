@@ -82,4 +82,17 @@ void main() {
     );
   });
 
+  /// Test case: Ignores numbers greater than 1000
+  ///
+  /// - Input: `"2,1001"`
+  /// - Expected Outcome: `2`
+  /// - Explanation:
+  ///   - The input contains the numbers `2` and `1001`.
+  ///   - The calculator should **ignore numbers greater than 1000**.
+  ///   - `1001` is ignored, so the sum is `2`.
+  ///   - The test verifies that only valid numbers are summed.
+  test('Ignores numbers greater than 1000', () {
+    expect(calculator.add("2,1001"), equals(2));
+  });
+
 }
