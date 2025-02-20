@@ -37,9 +37,14 @@ class StringCalculator {
 
       if (matches.isNotEmpty) {
         // If multiple delimiters are found, extract and escape them for regex use
-        delimiter = matches.map((match) {
-          return RegExp.escape(match.group(0)!.replaceAll('[', '').replaceAll(']', '')); // Remove brackets and escape
-        }).join('|'); // Join multiple delimiters with `|` for regex OR condition
+        delimiter = [
+          ',',  // Always include comma
+          '\n', // Always include newline
+          ...matches.map((match) {
+            return RegExp.escape(match.group(0)!.replaceAll('[', '').replaceAll(']', '')); // Remove brackets and escape
+          })
+        ].join('|'); // Join all delimiters with `|` for regex OR condition
+
       } else {
         // If no brackets are found, treat the entire section as a single custom delimiter
         delimiter = RegExp.escape(delimiterSection);
