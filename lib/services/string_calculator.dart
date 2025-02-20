@@ -1,25 +1,40 @@
-/// A simple String Calculator class that adds numbers from a given string.
 class StringCalculator {
-  /// Adds numbers from a comma-separated string.
+  /// Adds numbers provided in a delimited string.
   ///
-  /// - If the input string is empty, it returns 0.
-  /// - Otherwise, it splits the string by commas and newline, converts them to integers,
-  ///   and sums them up.
+  /// - Default delimiters: Comma (`,`) and newline (`\n`).
+  /// - Supports custom delimiters defined in the format: `//[delimiter]\n[numbers...]`.
+  /// - Returns 0 if the input string is empty.
   ///
-  /// Example:
-  /// ```dart
-  /// StringCalculator calculator = StringCalculator();
-  /// int result = calculator.add("1/n2,3"); // Returns 6
+  /// Example usages:
+  /// ```
+  /// add("1,2,3") -> 6
+  /// add("1\n2,3") -> 6
+  /// add("//;\n1;2;3") -> 6  // Custom delimiter ";"
   /// ```
   int add(String numbers) {
-    // Return 0 if the input string is empty
+    // Return 0 if input is empty
     if (numbers.isEmpty) return 0;
 
-    // Split the input string by commas and newline convert each value to an integer,
-    // and sum them up using `reduce`
-    return numbers
-        .split(RegExp(r'[\n,]')) // split the input by commas(,) and newline(\n)
-        .map(int.parse)
-        .reduce((a, b) => a + b);
+    // Default delimiter: comma `,` and newline `\n`
+    String delimiter = r'[\n,]';
+
+    // Check if input specifies a custom delimiter using the format "//[delimiter]\n[numbers...]"
+    final customDelimiterMatch = RegExp(r'^//(.+)\n').firstMatch(numbers);
+    if (customDelimiterMatch != null) {
+      // Extract custom delimiter and allow newlines as well
+      delimiter = '${RegExp.escape(customDelimiterMatch.group(1)!)}|\n';
+
+      // Remove the custom delimiter definition from the input string
+      numbers = numbers.substring(customDelimiterMatch.end);
+    }
+
+    // Split the numbers using the extracted/custom delimiter
+    var sanitizedNumbers = numbers
+        .split(RegExp(delimiter)) // Regex allows multiple delimiters
+        .where((number) => number.trim().isNotEmpty) // Ignore empty values
+        .map(int.parse); // Convert to integers
+
+    // Return the sum of all numbers, or 0 if the list is empty
+    return sanitizedNumbers.isEmpty ? 0 : sanitizedNumbers.reduce((a, b) => a + b);
   }
 }

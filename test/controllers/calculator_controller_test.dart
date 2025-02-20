@@ -31,4 +31,18 @@ void main() {
     controller.calculate();
     expect(controller.result.value, "0");
   });
+
+  /// Test case: Handles custom single-character delimiter ";"
+  ///
+  /// - Input: "//;\n1;2;3"
+  /// - Expected outcome: "6"
+  /// - Explanation:
+  ///   - The input starts with `//;`, indicating that `;` is the custom delimiter.
+  ///   - The numbers `1, 2, and 3` are separated using this delimiter.
+  ///   - The function should correctly parse and sum the numbers.
+  test('Handles custom delimiter ";"', () {
+    controller.updateInput("//;\n1;2;3");
+    controller.calculate();
+    expect(controller.result.value, "6");
+  });
 }
